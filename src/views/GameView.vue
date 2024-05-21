@@ -14,6 +14,7 @@
           </div>
         
       </div>
+      <span>{{ isWordLong && isWordValid && haveCentralLetter ? 'Válida' : 'inválida' }}</span>
       <div class="right-column w-full md:w-1/2 p-4 justify-center">
           <table class="table-auto w-full bg-white shadow-md rounded-lg">
               <thead>
@@ -38,7 +39,7 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
   import Hexagon from '../components/Hexagon.vue';
 
   const todaysLetters = ref(['A','B', 'C', 'D', 'E', 'F', 'G']);
@@ -47,6 +48,18 @@
   const submitWord = (e) =>  {
     console.log(word.value);
   }
+
+  const isWordLong = computed(() => {
+    return word.value.length > 3;
+  })
+  const isWordValid = computed(() => {
+    return word.value.split('').every(letter => todaysLetters.value.includes(letter.toUpperCase()));
+  })
+
+  const haveCentralLetter = computed(() => {
+    return word.value.toUpperCase().includes(todaysLetters.value[3]);
+  })
+
 </script>
 
   
