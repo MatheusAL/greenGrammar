@@ -1,30 +1,27 @@
 <template>
-  <div class="about w-full h-full flex flex-col md:flex-row bg-green-300">
-      <div class="left-column w-full md:w-1/2 flex flex-col justify-center  p-4">
-          <div class="flex justify-center h-2/6">
-            <h1 class="text-6xl">Green Grammar</h1>
-          </div>
-          <div class="h-4/6">
-            <div class="flower">
-              <Hexagon :letters="todaysLetters"/>
-            </div>
-            <div class="w-full p-5 mx-4 relative">
-              <input 
-                type="text" 
-                class="invisible-input text-4xl text-white uppercase font-extrabold w-full bg-transparent border-none outline-none text-black placeholder-gray-500"
-                v-model="word"
-                @keyup.enter="submitWord"
-            >
-            </div>
+  <div class="game-container flex justify-center items-center bg-green-500 p-6">
+    <div class="game-content w-full md:w-3/4 flex flex-col md:flex-row justify-center items-stretch bg-white rounded-2xl shadow-2xl p-8">
+      <div class="left-column w-full md:w-1/2 flex flex-col items-center mb-8 md:mb-0 md:mr-4">
+        <h1 class="text-6xl text-green-500 italic mb-4">Green Grammar</h1>
+        <div class="hexagon-container">
+          <Hexagon :letters="todaysLetters"/>
         </div>
-        
+        <div class="input-container w-full mt-4">
+          <input 
+            type="text" 
+            class="input-field text-4xl text-green-500 uppercase font-extrabold w-full bg-transparent border-b-2 border-green-500 outline-none text-center"
+            v-model="word"
+            @keyup.enter="submitWord"
+            placeholder="Enter your word"
+          >
+        </div>
       </div>
-      <div class="right-column w-full md:w-1/2 p-4 justify-center">
+      <div class="right-column w-full md:w-1/2 flex flex-col items-center">
         <Scoreboard :score="score"/>
       </div>
+    </div>
   </div>
 </template>
-
 <script setup>
   import { ref, computed } from 'vue'
   import Hexagon from '../components/Hexagon.vue';
@@ -32,16 +29,7 @@
 
   const todaysLetters = ref(['A','B', 'C', 'D', 'E', 'F', 'G']);
   const word = ref('');
-  const score = ref([
-    {
-      word: "test",
-      score: 10
-    },
-    {
-      word: "test 2",
-      score: 20
-    },
-  ]);
+  const score = ref([]);
   const submitWord = (e) =>  {
     if (isWordValid.value) {
 
@@ -72,15 +60,48 @@
 </script>
 
   
-<style>
 
-.flower {
-  display: grid;
-  grid-template-columns: repeat(5, 38px);
-  grid-template-rows: repeat(3, 68px);
-  
+<style scoped>
+.game-container {
+  min-height: 100vh;
+}
+
+.game-content {
+  max-width: 1280px;
+  min-height: 700px; /* Increased height */
+  display: flex;
   justify-content: center;
 }
 
+.left-column, .right-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.left-column {
+  width: 100%;
+}
+
+.right-column {
+  width: 100%;
+}
+
+.hexagon-container {
+  display: grid;
+  grid-template-columns: repeat(5, 38px);
+  grid-template-rows: repeat(3, 68px);
+  justify-content: center;
+}
+
+.input-field::placeholder {
+  color: #9CA3AF; /* Gray-500 */
+}
+
+.scoreboard-container {
+  width: 100%;
+  max-height: 300px; /* Limit height of scoreboard */
+  overflow-y: auto; /* Enable vertical scroll */
+}
 </style>
-  
