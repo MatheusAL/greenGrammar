@@ -31,6 +31,7 @@
   const todaysLetters = ref(['A','B', 'C', 'D', 'E', 'F', 'G']);
   const word = ref('');
   const score = ref([]);
+  const acceptedWordList = ref([]);
   //create a word list
   // onn mounted get from localstorage or from the API(word, lettters, score)    
 
@@ -39,17 +40,19 @@
   });
 
   const submitWord = (e) =>  {
-    if (isWordValid.value) {
-
+    if (!acceptedWordList.value.includes(word.value) && isWordValid.value) {
+      const wordScore = calculateScore()
       score.value.push({
         "word": word.value,
-        "score": calculateScore()
+        "score": wordScore.value
       });
+      acceptedWordList.value.push(word.value);
       localStorage.setItem('score', JSON.stringify(score.value));
+      localStorage.setItem('acceptedWordList', JSON.stringify(acceptedWordList.value));
+      notificationMessage.value = `Nice one! + ${wordScore}`;
     }
-    notificationMessage.value = `Word submitted: ${word.value}`;
+    //decide which type here, according to the validation of the word(create a function for it)
     notificationType.value = 'info';
-    
     word.value = '';
   }
 
@@ -60,10 +63,12 @@
     if(localStorage.getItem('currentGame') === '') {
       //generate new game
       score.value = [];
+      acceptedWordList.value = [];
       return;
     }
     if(localStorage.getItem('score')) {
       score.value = JSON.parse(localStorage.getItem('score'));
+      acceptedWordList.value = JSON.parse(localStorage.getItem('acceptedWordList'))
       return;
     }
     //load words, current letters, score
