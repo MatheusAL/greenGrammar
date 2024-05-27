@@ -60,13 +60,17 @@
   const notificationType = ref('info');
 
   const getInitialData = () => {
-    if(localStorage.getItem('currentGame') === '') {
-      //generate new game
+    if(!localStorage.getItem('currentGame')) {
+      //generate new game(api call? fetch from file? get some letters, save the date)
       score.value = [];
       acceptedWordList.value = [];
+      todaysLetters.value = getRandomLetters();
+      localStorage.removeItem('score');
+      localStorage.setItem('currentGame', JSON.stringify(todaysLetters.value))
       return;
     }
     if(localStorage.getItem('score')) {
+      todaysLetters.value = JSON.parse(localStorage.getItem('currentGame'));
       score.value = JSON.parse(localStorage.getItem('score'));
       acceptedWordList.value = JSON.parse(localStorage.getItem('acceptedWordList'))
       return;
@@ -78,6 +82,21 @@
   const calculateScore = () => {
     return word.value.length * 10;
   }
+
+  const getRandomLetters = ()  => {
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const letters = [];
+    while (letters.length < 7) {
+      const randomIndex = Math.floor(Math.random() * alphabet.length);
+      const letter = alphabet[randomIndex];
+      if (!letters.includes(letter)) {
+        letters.push(letter);
+      }
+    }
+    return letters;
+  }
+
+
   const isWordLong = computed(() => {
     return word.value.length > 3;
   });
