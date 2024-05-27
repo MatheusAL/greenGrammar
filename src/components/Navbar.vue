@@ -4,7 +4,7 @@
       <!-- Left-side items -->
       <div class="flex-1 flex justify-end md:justify-start space-x-4 md:space-x-8">
         <a href="#" class="text-green-400 hover:text-white transition duration-400 hidden md:block">Modo de jogo</a>
-        <a href="#" class="text-green-400 hover:text-white transition duration-400 hidden md:block">Reiniciar</a>
+        <a href="#" class="text-green-400 hover:text-white transition duration-400 hidden md:block" @click="resetGame">Reiniciar</a>
       </div>
 
       <!-- Centered logo -->
@@ -27,21 +27,26 @@
     <!-- Mobile menu -->
     <div :class="{ 'block': isMenuOpen, 'hidden': !isMenuOpen }" class="md:hidden">
       <a href="#" class="block text-green-400 hover:text-green-400 transition duration-400 p-2">Modo de jogo</a>
-      <a href="#" class="block text-green-400 hover:text-green-400 transition duration-400 p-2">Reiniciar</a>
+      <a href="#" class="block text-green-400 hover:text-green-400 transition duration-400 p-2" @click="resetGame">Reiniciar</a>
       <a href="#" class="block text-green-400 hover:text-green-400 transition duration-400 p-2">Configurações</a>
       <a href="#" class="block text-green-400 hover:text-green-400 transition duration-400 p-2">Sobre</a>
     </div>
   </nav>
   </template>
   
-  <script setup>
+<script setup>
   import { ref } from 'vue';
   
+  const emit = defineEmits(['inFocus', 'submit'])
   const isMenuOpen = ref(false);
   
   const toggleMenu = () => {
     isMenuOpen.value = !isMenuOpen.value;
   };
+
+  const resetGame = () => {
+    emit('resetGame');
+  }
 </script>
   
 <style scoped>

@@ -1,9 +1,9 @@
 <template>
-  <Navbar />
+  <Navbar @reset-game="resetGame"/>
   <div class="game-container flex justify-center items-center bg-green-500 p-6">
     <div class="game-content w-full md:w-3/4 flex flex-col md:flex-row justify-center items-stretch bg-white rounded-2xl shadow-2xl border-2 border-black p-8">
       <div class="left-column w-full md:w-1/2 flex flex-col justify-around items-center mb-8 md:mb-0 md:mr-4">
-        <h1 class="text-6xl text-green-500 mb-4">Green Grammar</h1>
+        <!-- <h1 class="text-6xl text-green-500 mb-4">Green Grammar</h1> -->
         <div class="hexagon-container">
           <Hexagon :letters="todaysLetters"/>
         </div>
@@ -14,6 +14,19 @@
             v-model="word"
             @keyup.enter="submitWord"
           >
+        </div>
+        <div class="controls w-full flex justify-around">
+          <button class="bg-green-400 hover:bg-gray-100 text-black font-semibold py-2 px-5 border border-black rounded shadow-xl"
+            @click="deleteLetter()"
+          >
+            Apagar
+          </button>
+          <button class="bg-green-400 hover:bg-gray-100 text-black font-semibold py-2 px-5 border border-black rounded shadow-xl"
+            @click="submitWord()"
+          >
+            Confirmar
+          </button>
+
         </div>
       </div>
       <div class="right-column w-full md:w-1/2 flex flex-col items-center">
@@ -34,6 +47,8 @@
   const word = ref('');
   const score = ref([]);
   const acceptedWordList = ref([]);
+  const notificationMessage = ref('');
+  const notificationType = ref('info');
   //create a word list
   // onn mounted get from localstorage or from the API(word, lettters, score)    
 
@@ -58,8 +73,6 @@
     word.value = '';
   }
 
-  const notificationMessage = ref('');
-  const notificationType = ref('info');
 
   const getInitialData = () => {
     if(!localStorage.getItem('currentGame')) {
@@ -98,6 +111,18 @@
     return letters;
   }
 
+  const resetGame = () => {
+    score.value = [];
+    acceptedWordList.value = [];
+    todaysLetters.value = getRandomLetters();
+    localStorage.removeItem('score');
+    localStorage.removeItem('acceptedWordList');
+    localStorage.setItem('currentGame', JSON.stringify(todaysLetters.value))
+  }
+
+  const deleteLetter = () => {
+    word.value = word.value.slice(0, word.value.length -1);
+  }
 
   const isWordLong = computed(() => {
     return word.value.length > 3;

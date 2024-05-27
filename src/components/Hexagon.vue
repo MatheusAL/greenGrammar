@@ -16,7 +16,7 @@
   width: 70px;
   height: 81px;
   background-color: #e4eaf3;
-  margin: -10px 0px -10px 5px;
+  /* margin: -10px 0px -10px 5px; */
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   color: black;
   font-weight: bold;
