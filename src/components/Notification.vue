@@ -15,7 +15,7 @@
     },
     duration: {
       type: Number,
-      default: 3000
+      default: 2500
     }
   });
   
@@ -23,9 +23,9 @@
   
   const showNotification = () => {
     visible.value = true;
-   /*  setTimeout(() => {
+    setTimeout(() => {
       visible.value = false;
-    }, props.duration); */
+    }, props.duration);
   };
   
   onMounted(() => {
@@ -42,9 +42,9 @@
   <style scoped>
   .notification {
     position: absolute;
-    right: 0;
-    left: 100px;
-    top: 150px;
+    
+    left: 820px;
+    top: 500px;
     margin: 0 auto;
     width: 90%;
     max-width: 100px;

@@ -1,4 +1,5 @@
 <template>
+  <Navbar />
   <div class="game-container flex justify-center items-center bg-green-500 p-6">
     <div class="game-content w-full md:w-3/4 flex flex-col md:flex-row justify-center items-stretch bg-white rounded-2xl shadow-2xl border-2 border-black p-8">
       <div class="left-column w-full md:w-1/2 flex flex-col justify-around items-center mb-8 md:mb-0 md:mr-4">
@@ -27,6 +28,7 @@
   import Hexagon from '../components/Hexagon.vue';
   import Scoreboard from '../components/Scoreboard.vue';
   import Notification from '../components/Notification.vue'
+  import Navbar from '../components/Navbar.vue'
 
   const todaysLetters = ref(['A','B', 'C', 'D', 'E', 'F', 'G']);
   const word = ref('');
@@ -44,7 +46,7 @@
       const wordScore = calculateScore()
       score.value.push({
         "word": word.value,
-        "score": wordScore.value
+        "score": wordScore
       });
       acceptedWordList.value.push(word.value);
       localStorage.setItem('score', JSON.stringify(score.value));
