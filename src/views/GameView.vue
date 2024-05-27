@@ -1,18 +1,17 @@
 <template>
   <div class="game-container flex justify-center items-center bg-green-500 p-6">
-    <div class="game-content w-full md:w-3/4 flex flex-col md:flex-row justify-center items-stretch bg-white rounded-2xl shadow-2xl p-8">
-      <div class="left-column w-full md:w-1/2 flex flex-col items-center mb-8 md:mb-0 md:mr-4">
-        <h1 class="text-6xl text-green-500 italic mb-4">Green Grammar</h1>
+    <div class="game-content w-full md:w-3/4 flex flex-col md:flex-row justify-center items-stretch bg-white rounded-2xl shadow-2xl border-2 border-black p-8">
+      <div class="left-column w-full md:w-1/2 flex flex-col justify-around items-center mb-8 md:mb-0 md:mr-4">
+        <h1 class="text-6xl text-green-500 mb-4">Green Grammar</h1>
         <div class="hexagon-container">
           <Hexagon :letters="todaysLetters"/>
         </div>
         <div class="input-container w-full mt-4">
           <input 
             type="text" 
-            class="input-field text-4xl text-green-500 uppercase font-extrabold w-full bg-transparent border-b-2 border-green-500 outline-none text-center"
+            class="input-field text-2xl text-green-500 uppercase font-extrabold w-full bg-transparent border-b-2 border-green-500 outline-none text-center"
             v-model="word"
             @keyup.enter="submitWord"
-            placeholder="Enter your word"
           >
         </div>
       </div>
@@ -20,27 +19,60 @@
         <Scoreboard :score="score"/>
       </div>
     </div>
+    <Notification v-if="notificationMessage" :message="notificationMessage" :type="notificationType"/>
   </div>
 </template>
 <script setup>
-  import { ref, computed } from 'vue'
+  import { ref, computed, onMounted } from 'vue'
   import Hexagon from '../components/Hexagon.vue';
   import Scoreboard from '../components/Scoreboard.vue';
+  import Notification from '../components/Notification.vue'
 
   const todaysLetters = ref(['A','B', 'C', 'D', 'E', 'F', 'G']);
   const word = ref('');
   const score = ref([]);
+  //create a word list
+  // onn mounted get from localstorage or from the API(word, lettters, score)    
+
+  onMounted(() => {
+    getInitialData();
+  });
+
   const submitWord = (e) =>  {
     if (isWordValid.value) {
 
       score.value.push({
         "word": word.value,
-        "score": 100
+        "score": calculateScore()
       });
+      localStorage.setItem('score', JSON.stringify(score.value));
     }
+    notificationMessage.value = `Word submitted: ${word.value}`;
+    notificationType.value = 'info';
+    
     word.value = '';
   }
 
+  const notificationMessage = ref('');
+  const notificationType = ref('info');
+
+  const getInitialData = () => {
+    if(localStorage.getItem('currentGame') === '') {
+      //generate new game
+      score.value = [];
+      return;
+    }
+    if(localStorage.getItem('score')) {
+      score.value = JSON.parse(localStorage.getItem('score'));
+      return;
+    }
+    //load words, current letters, score
+
+  }
+
+  const calculateScore = () => {
+    return word.value.length * 10;
+  }
   const isWordLong = computed(() => {
     return word.value.length > 3;
   });
@@ -76,7 +108,7 @@
 .left-column, .right-column {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   flex-grow: 1;
 }
 
@@ -86,6 +118,10 @@
 
 .right-column {
   width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .hexagon-container {
