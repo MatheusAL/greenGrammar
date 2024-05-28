@@ -3,7 +3,6 @@
   <div class="game-container flex justify-center items-center bg-green-500 p-6">
     <div class="game-content w-full md:w-3/4 flex flex-col md:flex-row justify-center items-stretch bg-white rounded-2xl shadow-2xl border-2 border-black p-8">
       <div class="left-column w-full md:w-1/2 flex flex-col justify-around items-center mb-8 md:mb-0 md:mr-4">
-        <!-- <h1 class="text-6xl text-green-500 mb-4">Green Grammar</h1> -->
         <div class="hexagon-container">
           <Hexagon :letters="todaysLetters"/>
         </div>
@@ -16,12 +15,12 @@
           >
         </div>
         <div class="controls w-full flex justify-around">
-          <button class="bg-green-400 hover:bg-gray-100 text-black font-semibold py-2 px-5 border border-black rounded shadow-xl"
+          <button class="bg-green-400 hover:bg-gray-100 text-black font-semibold py-2 px-5 border border-black rounded-xl shadow-xl"
             @click="deleteLetter()"
           >
             Apagar
           </button>
-          <button class="bg-green-400 hover:bg-gray-100 text-black font-semibold py-2 px-5 border border-black rounded shadow-xl"
+          <button class="bg-green-400 hover:bg-gray-100 text-black font-semibold py-2 px-5 border border-black rounded-xl shadow-xl"
             @click="submitWord()"
           >
             Confirmar
@@ -49,8 +48,6 @@
   const acceptedWordList = ref([]);
   const notificationMessage = ref('');
   const notificationType = ref('info');
-  //create a word list
-  // onn mounted get from localstorage or from the API(word, lettters, score)    
 
   onMounted(() => {
     getInitialData();
@@ -66,17 +63,40 @@
       acceptedWordList.value.push(word.value);
       localStorage.setItem('score', JSON.stringify(score.value));
       localStorage.setItem('acceptedWordList', JSON.stringify(acceptedWordList.value));
-      notificationMessage.value = `Nice one! + ${wordScore}`;
+      getNotification(wordScore)
+      word.value = '';
+      return;
     }
-    //decide which type here, according to the validation of the word(create a function for it)
-    notificationType.value = 'info';
+    getNotification()
     word.value = '';
+  }
+
+  const getNotification = (wordScore) => {
+    if (!isWordLong.value) {
+      notificationType.value = 'error';
+      notificationMessage.value = 'Palavra muito curta :('
+      return;
+    }
+
+    if (!isWordValidForToday.value) {
+      notificationType.value = 'error';
+      notificationMessage.value = 'Letras inválidas :('
+      return;
+    }
+
+    if (!haveCentralLetter.value) {
+      notificationType.value = 'error';
+      notificationMessage.value = 'Palavra sem a letra central :('
+      return;
+    }
+
+    notificationType.value = 'info';
+    notificationMessage.value = `Boa! +${wordScore}`;
   }
 
 
   const getInitialData = () => {
     if(!localStorage.getItem('currentGame')) {
-      //generate new game(api call? fetch from file? get some letters, save the date)
       score.value = [];
       acceptedWordList.value = [];
       todaysLetters.value = getRandomLetters();
@@ -84,12 +104,9 @@
       localStorage.setItem('currentGame', JSON.stringify(todaysLetters.value))
       return;
     }
-    if(localStorage.getItem('score')) {
-      todaysLetters.value = JSON.parse(localStorage.getItem('currentGame'));
-      score.value = JSON.parse(localStorage.getItem('score'));
-      acceptedWordList.value = JSON.parse(localStorage.getItem('acceptedWordList'))
-      return;
-    }
+    todaysLetters.value = JSON.parse(localStorage.getItem('currentGame'));
+    score.value = JSON.parse(localStorage.getItem('score')) || [];
+    acceptedWordList.value = JSON.parse(localStorage.getItem('acceptedWordList')) || [];
     //load words, current letters, score
 
   }

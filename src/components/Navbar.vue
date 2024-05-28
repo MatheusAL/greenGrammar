@@ -8,7 +8,7 @@
       </div>
 
       <!-- Centered logo -->
-      <div class="text-green-400 text-4xl font-bold absolute left-1/2 transform -translate-x-1/2">
+      <div class="text-green-400 text-2xl md:text-4xl font-bold absolute left-1/2 transform -translate-x-1/2 ">
         Green Grammar!
       </div>
 

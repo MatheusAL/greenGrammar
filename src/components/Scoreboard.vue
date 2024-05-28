@@ -1,6 +1,6 @@
 <template>
     <div class="scoreboard flex flex-col items-center w-full">
-      <h1 class="text-5xl text-green-500 p-4">Pontuação</h1>
+      <h1 class="text-4xl text-green-500 p-4">Pontuação</h1>
       <div class="table-container w-full">
         <table class="table-auto bg-white shadow-md w-full border-black border-2 rounded-xl">
           <thead>
