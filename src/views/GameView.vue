@@ -48,13 +48,15 @@
   const acceptedWordList = ref([]);
   const notificationMessage = ref('');
   const notificationType = ref('info');
+  const wordsSet = ref(new Set());
 
   onMounted(() => {
     getInitialData();
+    loadWords();
   });
 
   const submitWord = (e) =>  {
-    if (!acceptedWordList.value.includes(word.value) && isWordValid.value) {
+    if (!acceptedWordList.value.includes(word.value) && isWordValid.value && wordsSet.value.has(word.value)) {
       const wordScore = calculateScore()
       score.value.push({
         "word": word.value,
@@ -69,6 +71,17 @@
     }
     getNotification()
     word.value = '';
+  }
+
+  const loadWords = async () => {
+    try {
+        const response = await fetch('palavras.txt');
+        const text = await response.text();
+        const wordArray = text.split('\n').map(word => word.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+        wordsSet.value = new Set(wordArray);
+      } catch (error) {
+        console.error('Error loading words:', error);
+      }
   }
 
   const getNotification = (wordScore) => {
@@ -90,6 +103,12 @@
       return;
     }
 
+    if (!wordsSet.value.has(word.value)) {
+      notificationType.value = 'warning';
+      notificationMessage.value = 'Palavra doida kkkkkk'
+      return;
+    }
+  
     notificationType.value = 'info';
     notificationMessage.value = `Boa! +${wordScore}`;
   }
