@@ -1,5 +1,5 @@
 <template>
-  <Navbar @reset-game="resetGame"/>
+  <Navbar @reset-game="resetGame" @open-modal="openModal"/>
   <div class="game-container flex justify-center items-center bg-green-500 p-6">
     <div class="game-content w-full md:w-3/4 flex flex-col md:flex-row justify-center items-stretch bg-white rounded-2xl shadow-2xl border-2 border-black p-8">
       <div class="left-column w-full md:w-1/2 flex flex-col justify-around items-center mb-8 md:mb-0 md:mr-4">
@@ -33,14 +33,16 @@
       </div>
     </div>
     <Notification v-if="notificationMessage" :message="notificationMessage" :type="notificationType"/>
+    <About :isOpen="isModalOpen" @close="closeModal" />
   </div>
 </template>
 <script setup>
   import { ref, computed, onMounted } from 'vue'
   import Hexagon from '../components/Hexagon.vue';
   import Scoreboard from '../components/Scoreboard.vue';
-  import Notification from '../components/Notification.vue'
-  import Navbar from '../components/Navbar.vue'
+  import Notification from '../components/Notification.vue';
+  import Navbar from '../components/Navbar.vue';
+  import About from '../components/About.vue'
 
   const todaysLetters = ref(['A','B', 'C', 'D', 'E', 'F', 'G']);
   const word = ref('');
@@ -49,6 +51,7 @@
   const notificationMessage = ref('');
   const notificationType = ref('info');
   const wordsSet = ref(new Set());
+  const isModalOpen = ref(false);
 
   onMounted(() => {
     getInitialData();
@@ -166,6 +169,12 @@
     word.value = word.value.slice(0, word.value.length -1);
   }
 
+  const openModal = () => {
+    isModalOpen.value = true;
+  }
+  const closeModal = () => {
+    isModalOpen.value = false;
+  }
   const isWordLong = computed(() => {
     return word.value.length > 3;
   });
