@@ -47,7 +47,7 @@
     top: 500px;
     margin: 0 auto;
     width: 90%;
-    max-width: 100px;
+    max-width: 90px;
     background-color: #4caf50; /* Default to green */
     color: white;
     padding: 6px 12px;
@@ -56,7 +56,15 @@
     opacity: 0.9;
     transition: opacity 0.3s ease-in-out;
   }
-  
+  /* Media query para telas menores */
+  @media (max-width: 768px) {
+      .notification {
+          left: 50%;
+          top: 210px;
+          transform: translateX(-50%); 
+          max-width: 90%;
+      }
+  }
   .notification.info {
     background-color: #4caf50;
   }

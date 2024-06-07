@@ -62,10 +62,10 @@
         "word": word.value,
         "score": wordScore
       });
+      getNotification(wordScore)
       acceptedWordList.value.push(word.value);
       localStorage.setItem('score', JSON.stringify(score.value));
       localStorage.setItem('acceptedWordList', JSON.stringify(acceptedWordList.value));
-      getNotification(wordScore)
       word.value = '';
       return;
     }
@@ -106,6 +106,12 @@
     if (!wordsSet.value.has(word.value)) {
       notificationType.value = 'warning';
       notificationMessage.value = 'Palavra doida kkkkkk'
+      return;
+    }
+
+    if(acceptedWordList.value.includes(word.value)) {
+      notificationType.value = 'warning';
+      notificationMessage.value = 'Palavra já utilizada po'
       return;
     }
   
