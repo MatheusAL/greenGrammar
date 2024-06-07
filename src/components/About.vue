@@ -7,7 +7,7 @@
       </div>
       <div>
         <p class="mb-2">Criado por: Matheus Lima</p>
-        <p class="mb-2">GitHub: <a href="https://github.com/MatheusAL/greenGrammar" class="text-blue-500" target="_blank">https://github.com/MatheusAL/greenGrammar</a></p>
+        <p class="mb-2">GitHub: <a href="https://github.com/MatheusAL/greenGrammar" class="text-blue-300" target="_blank">https://github.com/MatheusAL/greenGrammar</a></p>
       </div>
     </div>
   </div>
